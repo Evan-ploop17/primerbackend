@@ -7,12 +7,14 @@ const { isValidRole, validateExistMail, validateUserById } = require('../helpers
 const router = Router()
 
 router.get('/', getUsers)
+
 router.put('/:id', [
     check('id', 'Its not an valid id').isMongoId(),
     check('id').custom(validateUserById),
     check('role').custom(isValidRole),
     validateFields
 ], putUsers)
+
 router.post('/', [
     check('name', 'The name is mandatory').not().isEmpty(),
     check('password', 'This is not a valid password').isLength({min: 6}),
@@ -20,7 +22,13 @@ router.post('/', [
     check('role').custom(isValidRole),
     validateFields
 ], postUsers)
-router.delete('/', deleteUsers)
+
+router.delete('/:id', [
+    check('id', 'Its not an valid id').isMongoId(),
+    check('id').custom(validateUserById),
+    validateFields
+], deleteUsers)
+
 router.patch('/', patchUsers)
 
 module.exports = router

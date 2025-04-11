@@ -63,10 +63,15 @@ exports.postUsers = async (req, res) => {
     })
 }
 
-exports.deleteUsers = (req, res) => {
-    res.json({
-        msg: 'delete'
-    })
+exports.deleteUsers = async (req, res) => {
+
+    const { id } = req.params
+    //  Asi se elimina un usuario de la base de datos. NO se recomienda porque perderiamos la integridad referencial
+    // En su lugar cambiaremos el estado del usuario
+    // const user = await User.findByIdAndDelete(id)
+
+    const user = await User.findByIdAndUpdate(id, {state: false })
+    res.json(user)
 }
 
 exports.patchUsers = (req, res) => {
