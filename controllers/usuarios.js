@@ -1,3 +1,4 @@
+const { response } = require('express')
 const User = require('../models/user.js')
 const bcryptjs = require('bcryptjs')
 
@@ -63,7 +64,7 @@ exports.postUsers = async (req, res) => {
     })
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.deleteUsers = async (req, res = response) => {
 
     const { id } = req.params
     //  Asi se elimina un usuario de la base de datos. NO se recomienda porque perderiamos la integridad referencial
@@ -71,7 +72,8 @@ exports.deleteUsers = async (req, res) => {
     // const user = await User.findByIdAndDelete(id)
 
     const user = await User.findByIdAndUpdate(id, {state: false })
-    res.json(user)
+    const authenticatedUser = req.authenticatedUser
+    res.json({user, authenticatedUser})
 }
 
 exports.patchUsers = (req, res) => {
